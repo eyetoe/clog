@@ -1,3 +1,4 @@
+//clog takes stdin and colorizes keywords in stdout
 package main
 
 import (
@@ -29,23 +30,29 @@ func main() {
 
 }
 
+// colorWord replaces lowercase, upppercase and first capital matches with a color
 func colorWord(source, word string, color func(...interface{}) string) string {
 
 	first := word
 
+	// manipulate the byte slice to make first character upper
 	rawchar := string(first[0])
 	capchar := strings.ToUpper(rawchar)
 	new := bytes.Replace([]byte(first), []byte(rawchar), []byte(capchar), 1)
 	first = string(new)
 
+	// upper and lower use builtin
 	upper := strings.ToUpper(word)
 	lower := strings.ToLower(word)
 
+	// replace
 	source = strings.Replace(source, first, color(first), -1)
 	source = strings.Replace(source, upper, color(upper), -1)
 	source = strings.Replace(source, lower, color(lower), -1)
 	return source
 }
+
+// fatih's color repo is very nice :)
 
 // normal colors
 var Red = color.New(color.FgRed).SprintFunc()
